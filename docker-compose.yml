@@ -1,0 +1,33 @@
+version : '3.8'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: eduflow_postgres
+    environment:
+      POSTGRES_DB: eduflow_db
+      POSTGRES_USER: eduflow_user
+      POSTGRES_PASSWORD: eduflow_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eduflow_user -d eduflow_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: eduflow_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@eduflow.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+volumes:
+  postgres_data:
