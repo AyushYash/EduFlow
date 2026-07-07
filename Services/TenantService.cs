@@ -28,6 +28,8 @@ public class TenantService : ITenantService
     {
         var normalizedSubdomain = dto.Subdomain.Trim().ToLowerInvariant();
 
+        Console.WriteLine($"[SERVICE] Raw dto.Subdomain: '{dto.Subdomain}', Normalized: '{normalizedSubdomain}'");
+
         var exists = await _repository.SubdomainExistsAsync(normalizedSubdomain);
         if (exists)
         {

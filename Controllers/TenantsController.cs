@@ -1,46 +1,46 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using EduFlow.Data;
-using EduFlow.Models;
+using EduFlow.Services.Interfaces;
+using EduFlow.DTOs;
 
-namespace Eduflow.Controllers;
+namespace EduFlow.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TenantsController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly ITenantService _service;
 
-    public TenantsController(AppDbContext context)
+    public TenantsController(ITenantService service)
     {
-        _context = context;
+        _service = service;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var tenants = await _context.Tenants
-            .Where(t => t.IsActive)
-            .ToListAsync();
+        var tenants = await _service.GetAllTenantsAsync();
         return Ok(tenants);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var tenant = await _context.Tenants.FindAsync(id);
-        if (tenant == null)
-        {
-            return NotFound();
-        }
+        var tenant = await _service.GetTenantByIdAsync(id);
+        if (tenant == null) return NotFound();
         return Ok(tenant);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Tenant tenant)
+    public async Task<IActionResult> Create([FromBody] CreateTenantDto dto)
     {
-        _context.Tenants.Add(tenant);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetById), new { id = tenant.Id }, tenant);
+        try
+        {
+            var tenant = await _service.CreateTenantAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = tenant.Id }, tenant);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
     }
 }
