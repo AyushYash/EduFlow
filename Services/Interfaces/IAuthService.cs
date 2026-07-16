@@ -1,0 +1,9 @@
+using EduFlow.DTOs;
+
+namespace EduFlow.Services.Interfaces;
+
+public interface IAuthService
+{
+    Task<AuthResponseDto> RegisterAsync(RegisterDto dto);
+    Task<AuthResponseDto?> LoginAsync(LoginDto dto);
+}
