@@ -34,6 +34,3 @@ public class AppDbContext : DbContext
         });
     }
 }
-
-//comment here
-//let's goooooo
