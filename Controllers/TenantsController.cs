@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using EduFlow.Services.Interfaces;
 using EduFlow.DTOs;
 
@@ -6,6 +7,7 @@ namespace EduFlow.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class TenantsController : ControllerBase
 {
     private readonly ITenantService _service;

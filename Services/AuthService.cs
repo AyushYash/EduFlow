@@ -13,7 +13,7 @@ public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _config;
-    private AuthService(IUserRepository userRepository, IConfiguration config)
+    public AuthService(IUserRepository userRepository, IConfiguration config)
     {
         _userRepository = userRepository;
         _config = config;
@@ -104,7 +104,7 @@ public class AuthService : IAuthService
             audience: _config["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(
-                double.Parse(_config["Jwt:ExpireMinutes"]!)),
+                double.Parse(_config["Jwt:ExpiryMinutes"]!)),
             signingCredentials: credentails
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
