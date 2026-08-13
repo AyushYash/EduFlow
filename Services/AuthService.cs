@@ -37,7 +37,7 @@ public class AuthService : IAuthService
             Email = email,
             PasswordHash = PasswordHash,
             FullName = dto.FullName.Trim(),
-            Role = "Student",
+            Role = "Admin",
             TenantId = dto.TenantId
         };
 

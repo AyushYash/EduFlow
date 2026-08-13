@@ -33,6 +33,7 @@ public class TenantsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateTenantDto dto)
     {
         try
